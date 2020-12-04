@@ -2,6 +2,7 @@ package Handers
 
 import (
 	"awesomeProject/MessageTypes"
+	"awesomeProject/models"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -20,6 +21,12 @@ func Hello(in chan MessageTypes.Profile, out chan MessageTypes.Profile) func(htt
 
 		profile := MessageTypes.Profile{Name: "Alex", Hobbies: []string{"snowboarding", "programming"}}
 
+		// Пример записи в базу данных
+		models.AddUser()
+
+		//models.GetUser(5)
+
+		// пример обмена сообщениями между потоками
 		select {
 		case in <- profile:
 			fmt.Println("received message from hello", profile)
