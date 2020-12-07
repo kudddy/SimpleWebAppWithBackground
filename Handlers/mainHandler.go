@@ -1,10 +1,11 @@
-package Handers
+package Handlers
 
 import (
 	"awesomeProject/MessageTypes"
 	"awesomeProject/models"
 	"encoding/json"
 	"fmt"
+	"github.com/gorilla/mux"
 	"net/http"
 )
 
@@ -23,6 +24,17 @@ func Hello(in chan MessageTypes.Profile, out chan MessageTypes.Profile) func(htt
 
 		// Пример записи в базу данных
 		models.AddUser()
+
+		// пример записи в базу
+		result := models.GetUser(1)
+
+		fmt.Println(result.Email)
+
+		//проверка работы роута с переменой
+
+		vars := mux.Vars(req)
+
+		fmt.Printf(vars["token"])
 
 		//models.GetUser(5)
 
