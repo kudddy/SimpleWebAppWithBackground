@@ -1,4 +1,4 @@
-package Handlers
+package handlers
 
 //var CreateAccount = func(w http.ResponseWriter, r *http.Request) {
 //

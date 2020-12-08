@@ -1,6 +1,9 @@
 package models
 
-import "github.com/jinzhu/gorm"
+import (
+	"github.com/jinzhu/gorm"
+	"time"
+)
 
 //структура для учётной записи пользователя
 type Account struct {
@@ -8,6 +11,22 @@ type Account struct {
 	Email    string `json:"email"`
 	Password string `json:"password"`
 	Token    string `json:"token";sql:"-"`
+}
+
+type JobStatusAdd struct {
+	ID        uint `gorm:"primary_key"`
+	CreatedAt time.Time
+	Token     string
+	Status    bool
+	UserName  string
+}
+
+type JobStatusController struct {
+	ID        uint
+	CreatedAt time.Time
+	UpdatedAt time.Time
+	Token     string
+	Status    string
 }
 
 func GetUser(u uint) *Account {

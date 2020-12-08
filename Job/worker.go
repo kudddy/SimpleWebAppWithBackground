@@ -28,6 +28,7 @@ func AddFriendWorker(token string) {
 	// потом берем один из популярных фреймворком и получаем оттуда список юзеров к кому нужно добавиться
 	// добавляем раз в несколько минут
 	// Определяем язык клиента
+	// TODO добавить проверку токена на валидность
 	lang := "python"
 	rand.Seed(time.Now().UnixNano())
 	page := rand.Intn(700)
@@ -43,7 +44,7 @@ func AddFriendWorker(token string) {
 
 	res, err := client.Do(req)
 	fmt.Println(err)
-	// TODOнужен еще один цил
+	// TODO нужен еще один цил
 	if res.StatusCode == 200 {
 		//парсим json
 		decoder := json.NewDecoder(res.Body)
@@ -53,13 +54,12 @@ func AddFriendWorker(token string) {
 		//fmt.Println(resp)
 		if err == nil {
 			for _, gazers := range resp {
-				fmt.Println(gazers.Login)
 				client := &http.Client{}
-				fmt.Println(c.UrlAddFriend + gazers.Login)
 				req, _ := http.NewRequest("PUT", c.UrlAddFriend+gazers.Login, nil)
 				req.Header.Set("Accept", c.GitAccept)
 				req.Header.Set("Authorization", "token"+" "+token)
 				res, err := client.Do(req)
+
 				if err == nil {
 					// проверяем все ли успешно
 					if res.StatusCode == 204 {

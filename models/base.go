@@ -33,6 +33,9 @@ func init() {
 
 	db = conn
 	db.Debug().AutoMigrate(&Account{})
+	db.Debug().AutoMigrate(&JobStatusAdd{})
+	db.Debug().AutoMigrate(&JobStatusController{})
+
 }
 
 func GetDB() *gorm.DB {

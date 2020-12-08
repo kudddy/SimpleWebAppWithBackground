@@ -39,3 +39,8 @@ type StarGazers struct {
 //type StarGazersStruct struct {
 //	data []StarGazers
 //}
+
+type StartJobResp struct {
+	MessageName string
+	Status      bool
+}
