@@ -35,6 +35,7 @@ func init() {
 	db.Debug().AutoMigrate(&Account{})
 	db.Debug().AutoMigrate(&JobStatusAdd{})
 	db.Debug().AutoMigrate(&JobStatusController{})
+	db.Debug().AutoMigrate(&JobCanceledActions{})
 
 }
 

@@ -18,7 +18,7 @@ func main() {
 	in := make(chan MessageTypes.Profile)
 
 	out := make(chan MessageTypes.Profile)
-
+	//тут должен быть запущен контроллер фононов задач
 	go Job.Workers(in, out)
 	// скорее всего нужен будет менеджер
 
@@ -26,7 +26,11 @@ func main() {
 
 	r.HandleFunc("/{token}/start/addfriend", handlers.StarJobAdd)
 
+	r.HandleFunc("/{token}/stop/addfriend", handlers.StopJobAdd)
+
 	r.HandleFunc("/status/{token}", handlers.Hello(in, out))
+
+	r.HandleFunc("/{token}/jobstatusbytoken", handlers.CheckStatusJob)
 
 	http.Handle("/", r)
 	http.ListenAndServe(":9000", nil)

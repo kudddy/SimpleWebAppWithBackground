@@ -13,6 +13,7 @@ type UserToken struct {
 type CheckTokenResp struct {
 	MessageName string
 	Status      bool
+	Desc        string
 }
 
 type StarGazers struct {
@@ -43,4 +44,9 @@ type StarGazers struct {
 type StartJobResp struct {
 	MessageName string
 	Status      bool
+}
+
+type CheckJobStatusResp struct {
+	MessageName string
+	Status      string
 }

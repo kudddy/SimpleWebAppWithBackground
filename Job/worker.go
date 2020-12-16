@@ -2,9 +2,11 @@ package Job
 
 import (
 	"awesomeProject/MessageTypes"
+	"awesomeProject/models"
 	c "awesomeProject/utils"
 	"encoding/json"
 	"fmt"
+	guuid "github.com/google/uuid"
 	"math/rand"
 	"net/http"
 	"strconv"
@@ -18,6 +20,48 @@ func Workers(in chan MessageTypes.Profile, out chan MessageTypes.Profile) {
 		item.Name = "Kirill"
 		out <- item
 	}
+}
+
+func StartWorker(token string) {
+	// бесконечный цикл
+	models.InsertJobStatus(token, "START")
+	count := 0
+	for {
+		stop := models.CheckActionCancelJob(token)
+		if stop {
+			fmt.Printf("Останавливаем работу воркера по требованию пользователя")
+			break
+		}
+		// db.Create(&Account{Email: "jfkddf", Password: "fsdfdsfdsf", Token: "sdfdfdsfddfs"})
+		// записываем в базу статус выполнения фоновоый залачи
+		models.InsertJobStatus(token, "RUNNING")
+		// операция добавления нового пользователя
+		fmt.Println("Infinite Loop 1")
+		fmt.Println(token)
+		username := guuid.New()
+		models.InsertJobStatusAdd(token, username.String(), true)
+		time.Sleep(20 * time.Second)
+
+		count += 1
+		if count == 10 {
+			break
+			fmt.Printf("Останавливаем работу воркера истечению срока жизни воркера")
+		}
+	}
+
+	models.InsertJobStatus(token, "FINISH")
+	fmt.Println()
+
+}
+
+func ContorellerWorkers(in chan MessageTypes.Profile, out chan MessageTypes.Profile) {
+	//метод реализует передачу основному сервису статуса от воркера, а так же их запуск
+	// в случае если требуется запуск
+	go Workers(in, out)
+
+	// в случае если нужено статус job
+
+	//в случае если нужна остановка работника
 }
 
 // страндартный воркер должен иметь следующий функционал: выполнять джоб и писать в базу все действия

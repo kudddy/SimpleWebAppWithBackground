@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"awesomeProject/Job"
 	"awesomeProject/MessageTypes"
 	"awesomeProject/models"
 	"encoding/json"
@@ -11,7 +10,7 @@ import (
 	"net/http"
 )
 
-func StarJobAdd(res http.ResponseWriter, req *http.Request) {
+func StopJobAdd(res http.ResponseWriter, req *http.Request) {
 	// нужно обернуть для получения данных от основной горутины
 	// проверяем валидный ли токен
 	vars := mux.Vars(req)
@@ -25,30 +24,20 @@ func StarJobAdd(res http.ResponseWriter, req *http.Request) {
 
 	var workerStatus MessageTypes.CheckTokenResp
 
-	workerStatus.MessageName = "STARTJOBADD"
+	workerStatus.MessageName = "STOPJOBADD"
 
 	//генерация уникального id задачи
 	id := guuid.New()
 	fmt.Println(id.String())
-	// TODO требуется запускать воркеры с статусом RUNNING  при старте приложения
+
 	if tokenStatus {
 		//запуск воркера
-		fmt.Println("запуск воркера")
+		fmt.Println("стоп выполения воркера")
 		// нужна проверка не запущен ли воркер уже/узнать статус и только потом запускать
-		jobStatus := models.GetJobStatusFromDb(token)
-		if jobStatus.Status == "RUNNING" {
-			workerStatus.Status = false
-			workerStatus.Desc = "the task is already running, complete the last"
-			fmt.Printf("Задача запущена, для запуска требуется прервать предыдущую")
-		} else if jobStatus.Status == "START" {
-			workerStatus.Status = false
-			workerStatus.Desc = "the task is starting, complete the last"
-			fmt.Printf("Задача запускается, для запуска требуется прервать предыдущую")
-		} else {
-			workerStatus.Status = true
-			workerStatus.Desc = "OK, start working"
-			go Job.StartWorker(token)
-		}
+		workerStatus.Status = true
+		// запись команды на остановка работы воркера
+		//go Job.StartWorker(token)
+		models.InsertCancelAction(token)
 
 	} else {
 		fmt.Println("Отправка сообщения о невалидности токена")
